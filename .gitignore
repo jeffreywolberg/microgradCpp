@@ -1,0 +1,6 @@
+*.o
+.vscode/
+Value
+Neuron
+Layer
+MLP
