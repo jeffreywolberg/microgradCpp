@@ -1,6 +1,8 @@
 *.o
 .vscode/
 Value
+Graph
+Utils
 Neuron
 Layer
 MLP

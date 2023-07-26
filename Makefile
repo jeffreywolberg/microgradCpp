@@ -3,6 +3,12 @@ CFLAGS=-std=c++20 -g
 LDFLAGS=
 LDLIBS=
 
+Graph: Graph.o Value.o
+	$(CXX) $(LDFLAGS) $(LDLIBS) $^ -o $@
+
+Graph.o: Graph.cpp
+	$(CXX) $(CFLAGS) -c $^ -o $@
+
 Value: Value.o
 	$(CXX) $(LDFLAGS) $(LDLIBS) $^ -o $@
 

@@ -16,12 +16,12 @@ class Value {
         string op;
         vector<Value*> prev;
         Value operator +(Value const &obj);
-        Value operator +(double const n);
+        // Value operator +(double const n);
         Value operator *(Value const &obj);
-        Value operator *(double const n);
+        // Value operator *(double const n);
         Value operator -(Value const &obj);
-        Value operator -(double const n);
+        // Value operator -(double const n);
         Value power(Value const &obj);
-        Value power(double const n);
+        // Value power(double const n);
 
 };
