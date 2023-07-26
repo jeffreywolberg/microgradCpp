@@ -9,9 +9,6 @@ Value: Value.o
 Value.o: Value.cpp
 	$(CXX) $(CFLAGS) -c $^ -o $@
 
-
-
-
 .PHONY: clean
 clean:
 	rm -rf main Value core a.out *.o
