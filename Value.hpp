@@ -10,6 +10,7 @@ class Value {
         Value(double data, string label);
         Value(double data);
         friend ostream &operator<<(ostream &os, const Value &value);
+        string getGraphName();
         double data;
         double grad;
         string label;

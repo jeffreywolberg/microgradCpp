@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
+#include <sstream>
 
 #include "Value.hpp"
 
@@ -38,6 +39,12 @@ ostream& operator<<(ostream &os, const Value &value) {
     os << "])" << endl;
     return os;
 }
+string Value::getGraphName() {
+    ostringstream oss;
+    oss << '"' << this->label << ", data: " << this->data << ", grad: " << this->grad << '"';
+    return oss.str();
+}
+
 Value Value::operator +(Value const &obj) {
     return Value(this->data + obj.data, "+", vector<Value*>{this, (Value*) &obj});
 }

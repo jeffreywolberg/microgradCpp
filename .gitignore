@@ -6,3 +6,6 @@ Utils
 Neuron
 Layer
 MLP
+.DS_Store
+*~*
+*tmp*
