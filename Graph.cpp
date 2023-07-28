@@ -51,15 +51,11 @@ int main() {
     Value a = Value(1, "a");
     Value b = Value(2, "b");
     Value c = a * b; c.label = "c";
-    Value d = Value(257, "d");
+    Value d = Value(23, "d");
     Value cd = c+d; cd.label="cd";
     Value e = cd + a;  e.label = "e";
-    cout << e << endl;
-    vector<Value*> l;
+    Value f = e.relu(); f.label = "f";
+    cout << f << endl;
     Graph g = Graph();
-    // g.topo(&e, l);
-    g.visualizeGraph(e);
-    // for (int i=0; i<l.size(); i++) {
-        // cout << i << ") " << *l[i]; 
-    // }
+    g.visualizeGraph(f);
 }

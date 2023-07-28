@@ -10,6 +10,8 @@
 
 using namespace std;
 
+
+
 Value::Value(double data, string label, string op, vector<Value*> prev) {
     this->data = data;
     this->grad = 0;
@@ -45,30 +47,46 @@ string Value::getGraphName() {
     return oss.str();
 }
 
-Value Value::operator +(Value const &obj) {
-    return Value(this->data + obj.data, "+", vector<Value*>{this, (Value*) &obj});
+Value Value::operator +(Value &obj) {
+    Value out = Value(this->data + obj.data, "+", vector<Value*>{this, (Value*) &obj});
+
+    return out;
 }
 // Value Value::operator +(double const n) {
 //     return Value(this->data + n);
 // }
-Value Value::operator *(Value const &obj) {
+Value Value::operator *(Value &obj) {
     return Value(this->data * obj.data, "*", vector<Value*>{this, (Value*) &obj});
 }
 // Value Value::operator *(double const n) {
 //     return Value(this->data * n);
 // }
-Value Value::operator -(Value const &obj) {
+Value Value::operator -(Value &obj) {
     return Value(this->data - obj.data, "-", vector<Value*>{this, (Value*) &obj});
 }
 // Value Value::operator -(double const n) {
 //     return Value(this->data - n);
 // }
-Value Value::power(Value const &obj) {
+Value Value::operator /(Value &obj) {
+    Value l = *this;
+    Value r = obj.power(1.0);
+    // return (*this) * obj.power(1.0); // why does this throw a compiler error but line below does not?
+    return l * r;
+}
+
+
+Value Value::power(Value &obj) {
     return Value(pow(this->data, (double) obj.data), "pow", vector<Value*>{this, (Value*) &obj});
 }
-// Value Value::power(double const n)  {
-//     return Value(pow(this->data, (double) n));
-// }
+
+Value Value::power(double const n)  {
+    return Value(pow(this->data, (double) n));
+}
+
+Value Value::relu() {
+    return Value(this->data > 0 ? this->data : 0, "relu", vector<Value*>{this});  
+}
+
 
 // int main() {
 //     Value a = Value(1, "a");
