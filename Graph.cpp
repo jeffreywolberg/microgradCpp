@@ -11,7 +11,7 @@ void Graph::topo(Value *v, EdgeList &eList) {
         topo(v->prev[i], eList);
         eList.push_back({v->prev[i]->getGraphName(), '"' + to_string((long) &v) + " [label=" + "'" + operatorStringMap[v->op] + "'" + "]" + '"'});
     }
-    if (operatorStringMap[v->op].size() > 0) eList.push_back({'"' + to_string((long) &v) + " [label=" + "'" + operatorStringMap[v->op] + "'" + "]" + '"', v->getGraphName()});
+    if (v->op != Operator::NONE) eList.push_back({'"' + to_string((long) &v) + " [label=" + "'" + operatorStringMap[v->op] + "'" + "]" + '"', v->getGraphName()});
 
 }
 
