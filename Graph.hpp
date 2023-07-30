@@ -1,3 +1,6 @@
+#ifndef _GRAPH_
+#define _GRAPH_
+
 #include <iostream>
 #include <vector>
 #include <string>
@@ -6,6 +9,9 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include <filesystem>
+#include <compare>
+#include <alloca.h>
+
 #include "Value.hpp"
 
 using namespace std;
@@ -21,3 +27,4 @@ class Graph {
         void visualizeGraph(Value terminal);
 };
 
+#endif

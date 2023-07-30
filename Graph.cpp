@@ -1,16 +1,17 @@
 #include "Graph.hpp"
 
-
 using namespace std;
+
+extern map<Operator, string> operatorStringMap;
 
 Graph::Graph() {}
 
 void Graph::topo(Value *v, EdgeList &eList) {
     for (int i=0; i<v->prev.size(); i++) {
         topo(v->prev[i], eList);
-        eList.push_back({v->prev[i]->getGraphName(), '"' + to_string((long) &v) + " [label=" + "'" + v->op + "'" + "]" + '"'});
+        eList.push_back({v->prev[i]->getGraphName(), '"' + to_string((long) &v) + " [label=" + "'" + operatorStringMap[v->op] + "'" + "]" + '"'});
     }
-    if (v->op.size() > 0) eList.push_back({'"' + to_string((long) &v) + " [label=" + "'" + v->op + "'" + "]" + '"', v->getGraphName()});
+    if (operatorStringMap[v->op].size() > 0) eList.push_back({'"' + to_string((long) &v) + " [label=" + "'" + operatorStringMap[v->op] + "'" + "]" + '"', v->getGraphName()});
 
 }
 
