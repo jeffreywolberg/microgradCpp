@@ -17,7 +17,7 @@ Value.o: Value.cpp
 
 .PHONY: clean
 clean:
-	rm -rf main Value core a.out *.o
+	rm -rf main Value Graph core a.out *.o
 
 .PHONY: all
 all: clean Value
