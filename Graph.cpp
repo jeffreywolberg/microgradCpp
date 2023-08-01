@@ -9,7 +9,7 @@ Graph::Graph() {}
 void Graph::topo(Value *v, EdgeList &eList) {
     for (int i=0; i<v->prev.size(); i++) {
         topo(v->prev[i], eList);
-        eList.push_back({v->prev[i]->getGraphName(), '"' + to_string((long) &v) + " [label=" + "'" + operatorStringMap[v->op] + "'" + "]" + '"'});
+        if (v->op != Operator::NONE) eList.push_back({v->prev[i]->getGraphName(), '"' + to_string((long) &v) + " [label=" + "'" + operatorStringMap[v->op] + "'" + "]" + '"'});
     }
     if (v->op != Operator::NONE) eList.push_back({'"' + to_string((long) &v) + " [label=" + "'" + operatorStringMap[v->op] + "'" + "]" + '"', v->getGraphName()});
 
@@ -56,7 +56,8 @@ int main() {
     Value cd = c+d; cd.label="cd";
     Value e = cd + a;  e.label = "e";
     Value f = e.relu(); f.label = "f";
-    cout << f << endl;
+    for (Value v : vector<Value>{a,b,c,d,cd,e,f})
+        cout << v << endl;
     Graph g = Graph();
     g.visualizeGraph(f);
 }

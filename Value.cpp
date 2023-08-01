@@ -27,11 +27,13 @@ Value::Value(double data, Operator op, vector<Value*> prev) {
 Value::Value(double data) {
     this->data = data;
     this->grad = 0;
+    this->op = Operator::NONE;
 }
 Value::Value(double data, string label) {
     this->data = data;
     this->label = label;
     this->grad = 0;
+    this->op = Operator::NONE;
 }
 ostream& operator<<(ostream &os, const Value &value) {
     os << "Value(" << value.data << ", label: " << value.label << ", op: " << operatorStringMap[value.op] << ", children: [";
