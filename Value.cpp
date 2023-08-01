@@ -50,7 +50,9 @@ string Value::getGraphName() {
 Value Value::operator +(Value &obj) {
     Value out = Value(this->data + obj.data, Operator::ADD, vector<Value*>{this, (Value*) &obj});
     
-    this->_backward = [this, &obj, out]() {
+    this->_backward = [this, &obj, &out]() {
+        cout << "In + backward function for node: " << this->label << endl;
+        cout << "this data: " << this->data << ", out.grad: " << out.grad << ", obj.data: " << obj.data << endl;
         obj.grad = 1.0 * out.grad;
         this->grad = 1.0 * out.grad;
     };
@@ -62,8 +64,8 @@ Value Value::operator +(Value &obj) {
 // }
 Value Value::operator *(Value &obj) {
     Value out = Value(this->data * obj.data, Operator::MUL, vector<Value*>{this, (Value*) &obj});
-    this->_backward = [this, &obj, out]() {
-        cout << "In backward function for node: " << this->label << endl;
+    this->_backward = [this, &obj, &out]() {
+        cout << "In * backward function for node: " << this->label << endl;
         cout << "this data: " << this->data << ", out.grad: " << out.grad << ", obj.data: " << obj.data << endl;
         obj.grad = this->data * out.grad;
         this->grad = obj.data * out.grad;
@@ -75,7 +77,7 @@ Value Value::operator *(Value &obj) {
 // }
 Value Value::operator -(Value &obj) {
     Value out = Value(this->data - obj.data, Operator::SUB, vector<Value*>{this, (Value*) &obj});
-    this->_backward = [this, &obj, out]() {
+    this->_backward = [this, &obj, &out]() {
         obj.grad = 1.0 * out.grad;
         this->grad = 1.0 * out.grad;
     };
@@ -95,7 +97,7 @@ Value Value::operator /(Value &obj) {
 
 Value Value::power(Value &obj) {
     Value out = Value(pow(this->data, (double) obj.data), Operator::POW, vector<Value*>{this, (Value*) &obj});
-    this->_backward = [this, &obj, out]() {
+    this->_backward = [this, &obj, &out]() {
         this->grad = (obj.data) * pow(this->data, obj.data-1) * out.grad;
         obj.grad = pow(this->data, obj.data) * log(this->data) * out.grad;
     };
@@ -108,7 +110,7 @@ Value Value::power(Value &obj) {
 
 Value Value::relu() {
     Value out = Value(this->data > 0 ? this->data : 0, Operator::RELU, vector<Value*>{this}); 
-    this->_backward = [this, out]() {
+    this->_backward = [this, &out]() {
         this->grad = out.data > 0 ? 1 : 0;
     };
     return out;
