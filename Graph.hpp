@@ -24,7 +24,7 @@ class Graph {
         Graph();
         void topo(Value *v, EdgeList &eList);
         void generateDotFile(const EdgeList &edges, const string &filename);
-        void visualizeGraph(Value terminal);
+        void visualizeGraph(Value terminal, filesystem::path);
 };
 
 #endif

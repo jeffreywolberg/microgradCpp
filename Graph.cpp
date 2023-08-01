@@ -15,7 +15,7 @@ void Graph::topo(Value *v, EdgeList &eList) {
 
 }
 
-void Graph::visualizeGraph(Value terminal) {
+void Graph::visualizeGraph(Value terminal, filesystem::path imgname) {
     EdgeList eList;
     this->topo(&terminal, eList);
     for (int i=0; i<eList.size(); i++) {
@@ -24,7 +24,6 @@ void Graph::visualizeGraph(Value terminal) {
     filesystem::path dirname = "tmp";
     filesystem::path filename = "tmp.dot";
     if (!filesystem::exists(dirname)) {filesystem::create_directory(dirname);}
-    filesystem::path imgname = "graph.png";
     this->generateDotFile(eList, filename);
     pid_t pid = fork();
     if (pid == 0) {
@@ -35,6 +34,7 @@ void Graph::visualizeGraph(Value terminal) {
         int status;
         waitpid(pid, &status, 0);
         cout << "Wrote computational graph to: " << imgname << endl;
+        
     }
 } 
 
@@ -59,5 +59,9 @@ int main() {
     for (Value v : vector<Value>{a,b,c,d,cd,e,f})
         cout << v << endl;
     Graph g = Graph();
-    g.visualizeGraph(f);
+    g.visualizeGraph(f, "graph.png");
+    f.grad = 1;
+    f.backward();
+    g.visualizeGraph(f, "graph2.png");
+
 }

@@ -27,7 +27,7 @@ class Value {
         double data;
         double grad;
         string label;
-        // function<void()> backward();
+        void backward();
         Operator op;
         vector<Value*> prev;
         Value operator +(Value &obj);

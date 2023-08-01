@@ -63,6 +63,8 @@ Value Value::operator +(Value &obj) {
 Value Value::operator *(Value &obj) {
     Value out = Value(this->data * obj.data, Operator::MUL, vector<Value*>{this, (Value*) &obj});
     this->_backward = [this, &obj, out]() {
+        cout << "In backward function for node: " << this->label << endl;
+        cout << "this data: " << this->data << ", out.grad: " << out.grad << ", obj.data: " << obj.data << endl;
         obj.grad = this->data * out.grad;
         this->grad = obj.data * out.grad;
     };
@@ -110,6 +112,15 @@ Value Value::relu() {
         this->grad = out.data > 0 ? 1 : 0;
     };
     return out;
+}
+
+void Value::backward() {
+    cout << "Running backward on: " << this->label << endl;
+    if (this->_backward != nullptr) this->_backward();
+    cout << this->label << "'s grad : " << this->grad << endl;
+    for (Value *ch : this->prev) {
+        ch->backward();
+    }
 }
 
 
