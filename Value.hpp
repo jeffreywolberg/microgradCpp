@@ -22,6 +22,7 @@ class Value {
         Value(double data, Operator op, vector<Value*> prev);
         Value(double data, string label);
         Value(double data);
+        Value(Value *v);
         friend ostream &operator<<(ostream &os, const Value &value);
         string getGraphName();
         double data;
@@ -30,16 +31,16 @@ class Value {
         void backward();
         Operator op;
         vector<Value*> prev;
-        Value operator +(Value &obj);
+        Value *operator +(Value &obj);
         // Value operator +(double const n);
-        Value operator *(Value &obj);
+        Value *operator *(Value &obj);
         // Value operator *(double const n);
-        Value operator -(Value &obj);
+        Value *operator -(Value &obj);
         // Value operator -(double const n);
-        Value operator /(Value &obj);
-        Value power(Value &obj);
+        Value *operator /(Value &obj);
+        Value *power(Value &obj);
         // Value power(double n);
-        Value relu();
+        Value *relu();
     private:
         function<void()> _backward;
 };

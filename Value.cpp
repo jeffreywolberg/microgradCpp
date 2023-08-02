@@ -10,6 +10,14 @@
 
 using namespace std;
 
+Value::Value(Value *v) {
+    this->data  = v->data;
+    this->grad  = v->grad;
+    this->op    = v->op; 
+    this->prev  = v->prev; // by value
+    this->label = v->label; 
+};
+
 Value::Value(double data, string label, Operator op, vector<Value*> prev) {
     this->data = data;
     this->grad = 0;
@@ -47,59 +55,61 @@ string Value::getGraphName() {
     return oss.str();
 }
 
-Value Value::operator +(Value &obj) {
-    Value out = Value(this->data + obj.data, Operator::ADD, vector<Value*>{this, (Value*) &obj});
+Value *Value::operator +(Value &obj) {
+    Value *out = new Value(this->data + obj.data, Operator::ADD, vector<Value*>{this, (Value*) &obj});
     
-    this->_backward = [this, &obj, &out]() {
+    this->_backward = [this, &obj, out]() {
         cout << "In + backward function for node: " << this->label << endl;
-        cout << "this data: " << this->data << ", out.grad: " << out.grad << ", obj.data: " << obj.data << endl;
-        obj.grad = 1.0 * out.grad;
-        this->grad = 1.0 * out.grad;
+        cout << "this data: " << this->data << ", out.grad: " << out->grad << ", out.data: " << out->data << ", obj.data: " << obj.data << endl;
+        obj.grad += 1.0 * out->grad;
+        this->grad += 1.0 * out->grad;
     };
 
     return out;
 }
-// Value Value::operator +(double const n) {
+// Value *Value::operator +(double const n) {
 //     return Value(this->data + n);
 // }
-Value Value::operator *(Value &obj) {
-    Value out = Value(this->data * obj.data, Operator::MUL, vector<Value*>{this, (Value*) &obj});
-    this->_backward = [this, &obj, &out]() {
+Value *Value::operator *(Value &obj) {
+    Value *out = new Value(this->data * obj.data, Operator::MUL, vector<Value*>{this, &obj});
+    cout << "Before backward, out.addr: " << (long) out << ", out.data: " << out->data << endl;
+    this->_backward = [this, &obj, out]() {
         cout << "In * backward function for node: " << this->label << endl;
-        cout << "this data: " << this->data << ", out.grad: " << out.grad << ", obj.data: " << obj.data << endl;
-        obj.grad = this->data * out.grad;
-        this->grad = obj.data * out.grad;
+        cout << "this data: " << this->data << ", out.addr " << (long) out << ", out.grad: " << out->grad << ", out.data: " << out->data << ", obj.data: " << obj.data << endl;
+        obj.grad += this->data * out->grad;
+        this->grad += obj.data * out->grad;
     };
     return out;
 }
-// Value Value::operator *(double const n) {
+// Value *Value::operator *(double const n) {
 //     return Value(this->data * n);
 // }
-Value Value::operator -(Value &obj) {
-    Value out = Value(this->data - obj.data, Operator::SUB, vector<Value*>{this, (Value*) &obj});
-    this->_backward = [this, &obj, &out]() {
-        obj.grad = 1.0 * out.grad;
-        this->grad = 1.0 * out.grad;
+Value *Value::operator -(Value &obj) {
+    Value *out = new Value(this->data - obj.data, Operator::SUB, vector<Value*>{this, (Value*) &obj});
+    this->_backward = [this, &obj, out]() {
+        obj.grad += 1.0 * out->grad;
+        this->grad += 1.0 * out->grad;
     };
     return out;
 }
-// Value Value::operator -(double const n) {
+// Value *Value::operator -(double const n) {
 //     return Value(this->data - n);
 // }
-Value Value::operator /(Value &obj) {
-    Value l = *this;
-    Value tmp = Value(-1.0);
-    Value r = obj.power(tmp);
+Value *Value::operator /(Value &obj) {
+    Value *l = this;
+    Value *tmp = new Value(-1.0);
+    Value tmp2 = obj.power(*tmp); tmp2.label = obj.label + "^-1";
+    Value *r = new Value(&tmp2);
     // return (*this) * obj.power(1.0); // why does this throw a compiler error but line below does not?
-    return l * r;
+    return (*l * *r);
 }
 
 
-Value Value::power(Value &obj) {
-    Value out = Value(pow(this->data, (double) obj.data), Operator::POW, vector<Value*>{this, (Value*) &obj});
-    this->_backward = [this, &obj, &out]() {
-        this->grad = (obj.data) * pow(this->data, obj.data-1) * out.grad;
-        obj.grad = pow(this->data, obj.data) * log(this->data) * out.grad;
+Value *Value::power(Value &obj) {
+    Value *out = new Value(pow(this->data, obj.data), Operator::POW, vector<Value*>{this, (Value*) &obj});
+    this->_backward = [this, &obj, out]() {
+        this->grad += (obj.data) * pow(this->data, obj.data-1) * out->grad;
+        obj.grad += pow(this->data, obj.data) * log(this->data) * out->grad;
     };
     return out;
 }
@@ -108,10 +118,10 @@ Value Value::power(Value &obj) {
 //     return Value(pow(this->data, (double) n));
 // }
 
-Value Value::relu() {
-    Value out = Value(this->data > 0 ? this->data : 0, Operator::RELU, vector<Value*>{this}); 
-    this->_backward = [this, &out]() {
-        this->grad = out.data > 0 ? 1 : 0;
+Value *Value::relu() {
+    Value *out = new Value(this->data > 0 ? this->data : 0, Operator::RELU, vector<Value*>{this}); 
+    this->_backward = [this, out]() {
+        this->grad += out->data > 0 ? 1 : 0;
     };
     return out;
 }

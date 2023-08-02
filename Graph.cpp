@@ -7,17 +7,24 @@ extern map<Operator, string> operatorStringMap;
 Graph::Graph() {}
 
 void Graph::topo(Value *v, EdgeList &eList) {
+    if (v == nullptr) return;
     for (int i=0; i<v->prev.size(); i++) {
         topo(v->prev[i], eList);
-        if (v->op != Operator::NONE) eList.push_back({v->prev[i]->getGraphName(), '"' + to_string((long) &v) + " [label=" + "'" + operatorStringMap[v->op] + "'" + "]" + '"'});
+        if (v && v->op != Operator::NONE) {
+            eList.push_back({v->prev[i]->getGraphName(), '"' + to_string((long) &v) + " [label=" + "'" + operatorStringMap[v->op] + "'" + "]" + '"'});
+        }
     }
-    if (v->op != Operator::NONE) eList.push_back({'"' + to_string((long) &v) + " [label=" + "'" + operatorStringMap[v->op] + "'" + "]" + '"', v->getGraphName()});
+    // cout << "v label3: " << v->label << endl;
+    if (v && v->op != Operator::NONE) {
+        eList.push_back({'"' + to_string((long) &v) + " [label=" + "'" + operatorStringMap[v->op] + "'" + "]" + '"', v->getGraphName()});
+    }
 
 }
 
 void Graph::visualizeGraph(Value terminal, filesystem::path imgname) {
     EdgeList eList;
     this->topo(&terminal, eList);
+    cout << "Finished topo" << endl;
     for (int i=0; i<eList.size(); i++) {
         cout << i << ") " << eList[i].first << " -> " << eList[i].second << endl; 
     }
@@ -51,17 +58,14 @@ void Graph::generateDotFile(const EdgeList &edges, const string &filename) {
 int main() {
     Value a = Value(1, "a");
     Value b = Value(2, "b");
-    Value c = a * b; c.label = "c";
-    Value d = Value(23, "d");
-    Value cd = c+d; cd.label="cd";
-    Value e = cd + a;  e.label = "e";
-    Value f = e.relu(); f.label = "f";
-    for (Value v : vector<Value>{a,b,c,d,cd,e,f})
-        cout << v << endl;
+    Value *c = a * b; c->label = "c";
+    // Value d = c / b; d.label = "d";
+    for (Value *v : vector<Value*>{&a,&b,c})
+        cout << *v << endl;
     Graph g = Graph();
-    g.visualizeGraph(f, "graph.png");
-    f.grad = 1;
-    f.backward();
-    g.visualizeGraph(f, "graph2.png");
+    g.visualizeGraph(c, "graph.png");
+    c->grad = 1;
+    c->backward();
+    g.visualizeGraph(c, "graph2.png");
 
 }
