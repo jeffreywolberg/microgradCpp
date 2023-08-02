@@ -30,11 +30,12 @@ void Graph::visualizeGraph(Value terminal, filesystem::path imgname) {
     }
     filesystem::path dirname = "tmp";
     filesystem::path filename = "tmp.dot";
+    filesystem::path filepath = dirname / filename;
     if (!filesystem::exists(dirname)) {filesystem::create_directory(dirname);}
-    this->generateDotFile(eList, filename);
+    this->generateDotFile(eList, filepath);
     pid_t pid = fork();
     if (pid == 0) {
-        char *args[] = {(char *)"/opt/homebrew/bin/dot", (char *)"-Tpng", (char*) filename.c_str(), (char *)"-o", (char *) imgname.c_str(), nullptr};
+        char *args[] = {(char *)"/opt/homebrew/bin/dot", (char *)"-Tpng", (char*) filepath.c_str(), (char *)"-o", (char *) imgname.c_str(), nullptr};
         execvp(args[0], args);
         cout << "Exec failed";
     } else {
@@ -56,16 +57,39 @@ void Graph::generateDotFile(const EdgeList &edges, const string &filename) {
 
 
 int main() {
-    Value a = Value(1, "a");
-    Value b = Value(2, "b");
-    Value *c = a * b; c->label = "c";
-    // Value d = c / b; d.label = "d";
-    for (Value *v : vector<Value*>{&a,&b,c})
-        cout << *v << endl;
+    // Doesn't work if the same node is used multiple times for different ops
+    // _backward attribute gets overwritten the second time
+    // Value a = Value(2, "a");
+    // Value b = Value(1, "b");
+    
+    // Value *c = a * b; c->label = "c";
+    // Value *d = *c / b; d->label = "d";
+    // for (Value *v : vector<Value*>{&a,&b,c,d})
+    //     cout << *v << endl;
+    // Graph g = Graph();
+    // g.visualizeGraph(d, "graphs/graph.png");
+    // d->grad = 1;
+    // d->backward();
+    // g.visualizeGraph(d, "graphs/graph2.png");
+
+    // cout << "d value: " << d->data << endl;
+
+    // works because _backward is not getting overwritten
+    Value a = Value(2, "a");
+    Value *b = a + a;
     Graph g = Graph();
-    g.visualizeGraph(c, "graph.png");
-    c->grad = 1;
-    c->backward();
-    g.visualizeGraph(c, "graph2.png");
+    b->grad = 1;
+    b->backward();
+    g.visualizeGraph(*b, "graphs/graph_double.png");
+
+    // does not work because _backward is getting overwritten by multiply
+    // Value a = Value(3, "a");
+    // Value *b = a + a;
+    // Value *c = *b * a;
+    // Graph g = Graph();
+    // c->grad = 1;
+    // c->backward();
+    // g.visualizeGraph(*c, "graphs/graph_double2.png");
+
 
 }

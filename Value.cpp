@@ -97,17 +97,19 @@ Value *Value::operator -(Value &obj) {
 // }
 Value *Value::operator /(Value &obj) {
     Value *l = this;
-    Value *tmp = new Value(-1.0);
-    Value tmp2 = obj.power(*tmp); tmp2.label = obj.label + "^-1";
-    Value *r = new Value(&tmp2);
+    Value *tmp = new Value(-1.0, "-1");
+    Value *r = obj.power(*tmp); r->label = obj.label + "^-1";
     // return (*this) * obj.power(1.0); // why does this throw a compiler error but line below does not?
     return (*l * *r);
 }
 
 
 Value *Value::power(Value &obj) {
+    cout << "pow addr: " << (long) this << endl;
     Value *out = new Value(pow(this->data, obj.data), Operator::POW, vector<Value*>{this, (Value*) &obj});
     this->_backward = [this, &obj, out]() {
+        cout << "In ** backward function for node: " << this->label << endl;
+        cout << "this data: " << this->data << ", out.addr " << (long) out << ", out.grad: " << out->grad << ", out.data: " << out->data << ", obj.data: " << obj.data << endl;
         this->grad += (obj.data) * pow(this->data, obj.data-1) * out->grad;
         obj.grad += pow(this->data, obj.data) * log(this->data) * out->grad;
     };
@@ -129,7 +131,7 @@ Value *Value::relu() {
 void Value::backward() {
     cout << "Running backward on: " << this->label << endl;
     if (this->_backward != nullptr) this->_backward();
-    cout << this->label << "'s grad : " << this->grad << endl;
+    cout << (long) this << ", " << this->label << "'s grad : " << this->grad << endl;
     for (Value *ch : this->prev) {
         ch->backward();
     }
