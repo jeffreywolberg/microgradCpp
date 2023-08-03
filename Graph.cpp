@@ -6,15 +6,24 @@ extern map<Operator, string> operatorStringMap;
 
 Graph::Graph() {}
 
-void Graph::topo(Value *v, EdgeList &eList) {
+void Graph::topo(Value *v, vector<Value*> &list, set<Value*> &visited) {
     if (v == nullptr) return;
+    if (visited.find(v) != visited.end()) return;
+    visited.insert(v);
     for (int i=0; i<v->prev.size(); i++) {
-        topo(v->prev[i], eList);
+        topo(v->prev[i], list, visited);
+    }
+    list.push_back(v);
+}
+
+void Graph::generateEdgeList(Value *v, EdgeList &eList) {
+    if (v == nullptr) return;
+    for (Value *ch : v->prev) {
+        generateEdgeList(ch, eList);
         if (v && v->op != Operator::NONE) {
-            eList.push_back({v->prev[i]->getGraphName(), '"' + to_string((long) &v) + " [label=" + "'" + operatorStringMap[v->op] + "'" + "]" + '"'});
+            eList.push_back({ch->getGraphName(), '"' + to_string((long) &v) + " [label=" + "'" + operatorStringMap[v->op] + "'" + "]" + '"'});
         }
     }
-    // cout << "v label3: " << v->label << endl;
     if (v && v->op != Operator::NONE) {
         eList.push_back({'"' + to_string((long) &v) + " [label=" + "'" + operatorStringMap[v->op] + "'" + "]" + '"', v->getGraphName()});
     }
@@ -22,12 +31,15 @@ void Graph::topo(Value *v, EdgeList &eList) {
 }
 
 void Graph::visualizeGraph(Value terminal, filesystem::path imgname) {
-    EdgeList eList;
-    this->topo(&terminal, eList);
+    vector<Value*> topoList;
+    set<Value*> visited;
+    this->topo(&terminal, topoList, visited);
     cout << "Finished topo" << endl;
-    for (int i=0; i<eList.size(); i++) {
-        cout << i << ") " << eList[i].first << " -> " << eList[i].second << endl; 
+    for (int i=0; i<topoList.size(); i++) {
+        cout << i << ") " << *topoList[i];
     }
+    EdgeList eList;
+    generateEdgeList(&terminal, eList);
     filesystem::path dirname = "tmp";
     filesystem::path filename = "tmp.dot";
     filesystem::path filepath = dirname / filename;
@@ -42,7 +54,6 @@ void Graph::visualizeGraph(Value terminal, filesystem::path imgname) {
         int status;
         waitpid(pid, &status, 0);
         cout << "Wrote computational graph to: " << imgname << endl;
-        
     }
 } 
 
@@ -75,12 +86,16 @@ int main() {
     // cout << "d value: " << d->data << endl;
 
     // works because _backward is not getting overwritten
-    Value a = Value(2, "a");
-    Value *b = a + a;
+    Value a = Value(8, "a");
+    Value b = Value(3, "b");
+    Value *c = a * b; c->label="c";
+    Value d = Value(4, "d");
+    Value *e = *c / d; e->label="e";
+    Value *f = a + *e; f.label="f";
     Graph g = Graph();
-    b->grad = 1;
-    b->backward();
-    g.visualizeGraph(*b, "graphs/graph_double.png");
+    f->grad = 1;
+    f->backward();
+    g.visualizeGraph(*f, "graphs/graph_double3.png");
 
     // does not work because _backward is getting overwritten by multiply
     // Value a = Value(3, "a");
