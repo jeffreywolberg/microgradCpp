@@ -1,0 +1,27 @@
+digraph DAG {
+    "d, data: 4, grad: -1.15888";
+    "a, data: 2, grad: 8.31777";
+    "b, data: 3, grad: 5.54518";
+    "c, data: 6, grad: 2.77259";
+    "c:*" [label="*"];
+    "-1, data: -1, grad: 23.0617";
+    "d^-1, data: 0.25, grad: 66.5421";
+    "d^-1:**" [label="**"];
+    "e, data: 1.5, grad: 11.0904";
+    "e:*" [label="*"];
+    "f, data: 8, grad: 1";
+    "f:**" [label="**"];
+
+    "d, data: 4, grad: -1.15888" -> "f:**";
+    "a, data: 2, grad: 8.31777" -> "c:*";
+    "b, data: 3, grad: 5.54518" -> "c:*";
+    "c:*" -> "c, data: 6, grad: 2.77259";
+    "c, data: 6, grad: 2.77259" -> "e:*";
+    "d, data: 4, grad: -1.15888" -> "d^-1:**";
+    "-1, data: -1, grad: 23.0617" -> "d^-1:**";
+    "d^-1:**" -> "d^-1, data: 0.25, grad: 66.5421";
+    "d^-1, data: 0.25, grad: 66.5421" -> "e:*";
+    "e:*" -> "e, data: 1.5, grad: 11.0904";
+    "e, data: 1.5, grad: 11.0904" -> "f:**";
+    "f:**" -> "f, data: 8, grad: 1";
+}

@@ -16,10 +16,12 @@ void Graph::topo(Value *v, vector<Value*> &list, set<Value*> &visited) {
     list.push_back(v);
 }
 
-void Graph::generateEdgeList(Value *v, EdgeList &eList) {
+void Graph::generateEdgeList(Value *v, EdgeList &eList, set<Value*> &visited) {
     if (v == nullptr) return;
+    if (visited.find(v) != visited.end()) return;
+    visited.insert(v);
     for (Value *ch : v->prev) {
-        generateEdgeList(ch, eList);
+        generateEdgeList(ch, eList, visited);
         if (v && v->op != Operator::NONE) {
             eList.push_back({ch->getGraphName(), v->getGraphOpName()});
         }
@@ -38,9 +40,11 @@ void Graph::visualizeGraph(Value terminal, filesystem::path imgname) {
         cout << i << ") " << *topoList[i];
     }
     EdgeList eList;
-    generateEdgeList(&terminal, eList);
-    filesystem::path dirname = "tmp";
-    filesystem::path filename = "tmp.dot";
+    visited.clear();
+    generateEdgeList(&terminal, eList, visited);
+    filesystem::path dirname = imgname.parent_path();
+    filesystem::path filename = imgname.stem();
+    filename.replace_extension(".dot");
     filesystem::path filepath = dirname / filename;
     if (!filesystem::exists(dirname)) {filesystem::create_directory(dirname);}
     this->generateDotFile(topoList, eList, filepath);
@@ -93,12 +97,12 @@ int main() {
     // cout << "d value: " << d->data << endl;
 
     // works because _backward is not getting overwritten
-    Value a = Value(8, "a");
+    Value a = Value(2, "a");
     Value b = Value(3, "b");
     Value *c = a * b; c->label="c";
     Value d = Value(4, "d");
     Value *e = *c / d; e->label="e";
-    Value *f = a + *e; f->label="f";
+    Value *f = d.power(*e); f->label="f";
     Graph g = Graph();
     f->grad = 1;
     f->backward();

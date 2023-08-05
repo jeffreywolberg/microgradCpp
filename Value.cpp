@@ -78,7 +78,7 @@ Value *Value::operator +(Value &obj) {
 // }
 Value *Value::operator *(Value &obj) {
     Value *out = new Value(this->data * obj.data, Operator::MUL, vector<Value*>{this, &obj});
-    cout << "Before backward, out.addr: " << (long) out << ", out.data: " << out->data << endl;
+    cout << long (out) << " result of mul between " << this->data << " and " << obj.data << ": " << out->data << endl; 
     out->_backward =  [this, &obj, out]() {
         cout << "In * backward function for node: " << this->label << endl;
         cout << "this data: " << this->data << ", out.addr " << (long) out << ", out.grad: " << out->grad << ", out.data: " << out->data << ", obj.data: " << obj.data << endl;
@@ -111,8 +111,8 @@ Value *Value::operator /(Value &obj) {
 
 
 Value *Value::power(Value &obj) {
-    cout << "pow addr: " << (long) this << endl;
     Value *out = new Value(pow(this->data, obj.data), Operator::POW, vector<Value*>{this, (Value*) &obj});
+    cout << long (out) << " result of pow between " << this->data << " and " << obj.data << ": " << out->data << endl; 
     out->_backward =  [this, &obj, out]() {
         cout << "In ** backward function for node: " << this->label << endl;
         cout << "this data: " << this->data << ", out.addr " << (long) out << ", out.grad: " << out->grad << ", out.data: " << out->data << ", obj.data: " << obj.data << endl;
@@ -137,7 +137,9 @@ Value *Value::relu() {
 void Value::backward() {
     cout << "Running backward on: " << this->label << endl;
     if (this->_backward != nullptr) this->_backward();
-    cout << (long) this << ", " << this->label << "'s grad : " << this->grad << endl;
+    for (Value *ch : this->prev) {
+        cout << (long) ch << ", " << ch->label << "'s grad : " << ch->grad << endl;
+    }
     for (Value *ch : this->prev) {
         ch->backward();
     }

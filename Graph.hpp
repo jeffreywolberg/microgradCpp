@@ -24,7 +24,7 @@ class Graph {
         void topo(Value *v, vector<Value*> &list, set<Value*> &visited);
         void generateDotFile(vector<Value*> topoList, const EdgeList &edges, const string &filename);
         void visualizeGraph(Value terminal, filesystem::path);
-        void generateEdgeList(Value *v, EdgeList &eList);
+        void generateEdgeList(Value *v, EdgeList &eList, set<Value*> &visited);
 };
 
 #endif
