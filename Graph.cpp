@@ -21,13 +21,12 @@ void Graph::generateEdgeList(Value *v, EdgeList &eList) {
     for (Value *ch : v->prev) {
         generateEdgeList(ch, eList);
         if (v && v->op != Operator::NONE) {
-            eList.push_back({ch->getGraphName(), '"' + to_string((long) &v) + " [label=" + "'" + operatorStringMap[v->op] + "'" + "]" + '"'});
+            eList.push_back({ch->getGraphName(), v->getGraphOpName()});
         }
     }
     if (v && v->op != Operator::NONE) {
-        eList.push_back({'"' + to_string((long) &v) + " [label=" + "'" + operatorStringMap[v->op] + "'" + "]" + '"', v->getGraphName()});
+        eList.push_back({v->getGraphOpName(), v->getGraphName()});
     }
-
 }
 
 void Graph::visualizeGraph(Value terminal, filesystem::path imgname) {
@@ -44,7 +43,7 @@ void Graph::visualizeGraph(Value terminal, filesystem::path imgname) {
     filesystem::path filename = "tmp.dot";
     filesystem::path filepath = dirname / filename;
     if (!filesystem::exists(dirname)) {filesystem::create_directory(dirname);}
-    this->generateDotFile(eList, filepath);
+    this->generateDotFile(topoList, eList, filepath);
     pid_t pid = fork();
     if (pid == 0) {
         char *args[] = {(char *)"/opt/homebrew/bin/dot", (char *)"-Tpng", (char*) filepath.c_str(), (char *)"-o", (char *) imgname.c_str(), nullptr};
@@ -57,9 +56,17 @@ void Graph::visualizeGraph(Value terminal, filesystem::path imgname) {
     }
 } 
 
-void Graph::generateDotFile(const EdgeList &edges, const string &filename) {
+void Graph::generateDotFile(vector<Value*> topoList, const EdgeList &edges, const string &filename) {
     ofstream dot_file(filename);
     dot_file << "digraph DAG {\n";
+    for (const auto &node : topoList) {
+        dot_file << "    " << node->getGraphName() << ";" << endl;
+        if (node->op != Operator::NONE) {
+            dot_file << "    " << node->getGraphOpName() << " [label=" << '"' << operatorStringMap[node->op] << '"' << "];" << endl;
+        }
+    }
+    dot_file << "\n";
+
     for (const auto &edge : edges) {
         dot_file << "    " << edge.first << " -> " << edge.second << ";\n";
     }
@@ -91,7 +98,7 @@ int main() {
     Value *c = a * b; c->label="c";
     Value d = Value(4, "d");
     Value *e = *c / d; e->label="e";
-    Value *f = a + *e; f.label="f";
+    Value *f = a + *e; f->label="f";
     Graph g = Graph();
     f->grad = 1;
     f->backward();

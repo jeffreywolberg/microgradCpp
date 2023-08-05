@@ -55,6 +55,12 @@ string Value::getGraphName() {
     return oss.str();
 }
 
+string Value::getGraphOpName() {
+    ostringstream oss;
+    oss << '"' + this->label + ":" + operatorStringMap[this->op] + '"';
+    return oss.str();
+}
+
 Value *Value::operator +(Value &obj) {
     Value *out = new Value(this->data + obj.data, Operator::ADD, vector<Value*>{this, (Value*) &obj});
     

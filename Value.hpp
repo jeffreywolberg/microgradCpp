@@ -25,6 +25,7 @@ class Value {
         Value(Value *v);
         friend ostream &operator<<(ostream &os, const Value &value);
         string getGraphName();
+        string getGraphOpName();
         double data;
         double grad;
         string label;
