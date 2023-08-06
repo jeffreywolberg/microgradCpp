@@ -102,7 +102,7 @@ int main() {
     // g.backward(f);
     // g.visualizeGraph(*f, "graphs/graph_double3.png");
 
-    Layer l = Layer(2, 2, "l0", false);
+    Layer l = Layer(2, 4, "l0", false);
     for (Value *v : l.paramaters()) {
         cout << *v;
     }
@@ -110,6 +110,8 @@ int main() {
     data.push_back(new Value(.5, "d0"));
     data.push_back(new Value(.25, "d1"));
     // data.push_back(new Value(.75, "d2"));
+    // data.push_back(new Value(.05, "d3"));
+
 
     vector<Value *> res = l.call(data);
     for (Value *v : res) {
@@ -124,4 +126,5 @@ int main() {
         g.backward(v);
     }
     g.visualizeGraph(res, "graphs/graph_double3.png");
+    cout << l;
 }

@@ -11,6 +11,9 @@ class Layer {
         vector<Value *>call(vector<Value*> data);
         vector<Neuron *> neurons;
         vector<Value *> paramaters();
+        friend ostream& operator<<(ostream &os, const Layer &layer);
+        string layerName;
+
 };
 
 #endif

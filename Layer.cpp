@@ -7,6 +7,7 @@ Layer::Layer(int nin, int nout, string layerName, bool nonlin) {
     for (int i=0; i<nout; i++) {
         neurons.push_back(new Neuron(nin, layerName + ":neuron" + to_string(i), nonlin));
     }
+    this->layerName = layerName;
 }
 
 vector<Value*> Layer::paramaters() {
@@ -30,6 +31,15 @@ vector<Value *> Layer::call(vector<Value *> data) {
     }
     return res;
 }
+
+ostream& operator<<(ostream &os, const Layer &layer) {
+    for (int i=0; i<layer.neurons.size(); i++) {
+        Neuron *n = layer.neurons[i];
+        os << layer.layerName << ":" << "n" << i << ": " << *n;
+    }
+    return os;
+}
+
 
 // int main() {
 //     Layer l = Layer(2, 2, "l0", false);
