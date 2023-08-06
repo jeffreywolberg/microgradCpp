@@ -11,7 +11,7 @@
 #include <filesystem>
 #include <set>
 
-#include "Neuron.hpp"
+#include "Layer.hpp"
 
 using namespace std;
 
@@ -23,7 +23,7 @@ class Graph {
         Graph();
         void topo(Value *v, vector<Value*> &list, set<Value*> &visited);
         void generateDotFile(vector<Value*> topoList, const EdgeList &edges, const string &filename);
-        void visualizeGraph(Value terminal, filesystem::path);
+        void visualizeGraph(vector<Value *> terminalNodes, filesystem::path);
         void generateEdgeList(Value *v, EdgeList &eList, set<Value*> &visited);
         void backward(Value *terminal);
 };

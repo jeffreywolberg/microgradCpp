@@ -31,17 +31,20 @@ void Graph::generateEdgeList(Value *v, EdgeList &eList, set<Value*> &visited) {
     }
 }
 
-void Graph::visualizeGraph(Value terminal, filesystem::path imgname) {
+void Graph::visualizeGraph(vector<Value *>terminalNodes, filesystem::path imgname) {
     vector<Value*> topoList;
     set<Value*> visited;
-    this->topo(&terminal, topoList, visited);
-    cout << "Finished topo" << endl;
-    for (int i=0; i<topoList.size(); i++) {
-        cout << i << ") " << *topoList[i];
-    }
     EdgeList eList;
-    visited.clear();
-    generateEdgeList(&terminal, eList, visited);
+    for (Value *terminal : terminalNodes) {
+        visited.clear();
+        this->topo(terminal, topoList, visited);
+        cout << "Finished topo" << endl;
+        for (int i=0; i<topoList.size(); i++) {
+            cout << i << ") " << *topoList[i];
+        }
+        visited.clear();
+        generateEdgeList(terminal, eList, visited);
+    }
     filesystem::path dirname = imgname.parent_path();
     filesystem::path filename = imgname.stem();
     filename.replace_extension(".dot");
@@ -88,29 +91,37 @@ void Graph::backward(Value *terminal) {
     }
 }
 
-// int main() {
-//     Value a = Value(2, "a");
-//     Value b = Value(3, "b");
-//     Value *c = a * b; c->label="c";
-//     Value d = Value(4, "d");
-//     Value *e = *c / d; e->label="e";
-//     Value *f = d.power(*e); f->label="f";
-//     Graph g = Graph();
-//     g.backward(f);
-//     g.visualizeGraph(*f, "graphs/graph_double3.png");
+int main() {
+    // Value a = Value(2, "a");
+    // Value b = Value(3, "b");
+    // Value *c = a * b; c->label="c";
+    // Value d = Value(4, "d");
+    // Value *e = *c / d; e->label="e";
+    // Value *f = d.power(*e); f->label="f";
+    // Graph g = Graph();
+    // g.backward(f);
+    // g.visualizeGraph(*f, "graphs/graph_double3.png");
 
-//     // Neuron n = Neuron(3, "neuron1");
-//     // for (Value *v : n.paramaters()) {
-//     //     cout << *v;
-//     // }
-//     // vector<Value *> data;
-//     // data.push_back(new Value(.5, "d1"));
-//     // data.push_back(new Value(.25, "d2"));
-//     // data.push_back(new Value(.75, "d3"));
+    Layer l = Layer(2, 2, "l0", false);
+    for (Value *v : l.paramaters()) {
+        cout << *v;
+    }
+    vector<Value *> data;
+    data.push_back(new Value(.5, "d0"));
+    data.push_back(new Value(.25, "d1"));
+    // data.push_back(new Value(.75, "d2"));
 
-//     // Value *res = n.call(data); res->label = "res";
-//     // cout << *res << endl;
-//     // cout << n << endl;
+    vector<Value *> res = l.call(data);
+    for (Value *v : res) {
+        cout << *v << endl;
+    }
 
-//     // res->grad = 1;
-// }
+    // Graph g = Graph();
+    // g.backward(res);
+    // g.visualizeGraph(res, "graphs/graph_double3.png");
+    Graph g = Graph();
+    for (Value *v : res) {
+        g.backward(v);
+    }
+    g.visualizeGraph(res, "graphs/graph_double3.png");
+}
