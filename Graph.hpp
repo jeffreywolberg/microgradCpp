@@ -11,7 +11,7 @@
 #include <filesystem>
 #include <set>
 
-#include "Value.hpp"
+#include "Neuron.hpp"
 
 using namespace std;
 
@@ -25,6 +25,7 @@ class Graph {
         void generateDotFile(vector<Value*> topoList, const EdgeList &edges, const string &filename);
         void visualizeGraph(Value terminal, filesystem::path);
         void generateEdgeList(Value *v, EdgeList &eList, set<Value*> &visited);
+        void backward(Value *terminal);
 };
 
 #endif

@@ -77,26 +77,20 @@ void Graph::generateDotFile(vector<Value*> topoList, const EdgeList &edges, cons
     dot_file << "}\n";
 }
 
+void Graph::backward(Value *terminal) {
+    vector<Value*> topoList;
+    set<Value*> visited;
+    this->topo(terminal, topoList, visited);
+    terminal->grad = 1;
+    assert(topoList.back() == terminal);
+    for (int i=topoList.size()-1; i>=0; i--) {
+        if (topoList[i]->_backward != nullptr) topoList[i]->_backward();
+    }
+}
+
+
 
 int main() {
-    // Doesn't work if the same node is used multiple times for different ops
-    // _backward attribute gets overwritten the second time
-    // Value a = Value(2, "a");
-    // Value b = Value(1, "b");
-    
-    // Value *c = a * b; c->label = "c";
-    // Value *d = *c / b; d->label = "d";
-    // for (Value *v : vector<Value*>{&a,&b,c,d})
-    //     cout << *v << endl;
-    // Graph g = Graph();
-    // g.visualizeGraph(d, "graphs/graph.png");
-    // d->grad = 1;
-    // d->backward();
-    // g.visualizeGraph(d, "graphs/graph2.png");
-
-    // cout << "d value: " << d->data << endl;
-
-    // works because _backward is not getting overwritten
     Value a = Value(2, "a");
     Value b = Value(3, "b");
     Value *c = a * b; c->label="c";
@@ -104,18 +98,21 @@ int main() {
     Value *e = *c / d; e->label="e";
     Value *f = d.power(*e); f->label="f";
     Graph g = Graph();
-    f->grad = 1;
-    f->backward();
+    g.backward(f);
     g.visualizeGraph(*f, "graphs/graph_double3.png");
 
-    // does not work because _backward is getting overwritten by multiply
-    // Value a = Value(3, "a");
-    // Value *b = a + a;
-    // Value *c = *b * a;
-    // Graph g = Graph();
-    // c->grad = 1;
-    // c->backward();
-    // g.visualizeGraph(*c, "graphs/graph_double2.png");
+    // Neuron n = Neuron(3, "neuron1");
+    // for (Value *v : n.paramaters()) {
+    //     cout << *v;
+    // }
+    // vector<Value *> data;
+    // data.push_back(new Value(.5, "d1"));
+    // data.push_back(new Value(.25, "d2"));
+    // data.push_back(new Value(.75, "d3"));
 
+    // Value *res = n.call(data); res->label = "res";
+    // cout << *res << endl;
+    // cout << n << endl;
 
+    // res->grad = 1;
 }

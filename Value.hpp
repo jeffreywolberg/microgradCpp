@@ -29,7 +29,6 @@ class Value {
         double data;
         double grad;
         string label;
-        void backward();
         Operator op;
         vector<Value*> prev;
         Value *operator +(Value &obj);
@@ -42,7 +41,6 @@ class Value {
         Value *power(Value &obj);
         // Value power(double n);
         Value *relu();
-    private:
         function<void()> _backward;
 };
 

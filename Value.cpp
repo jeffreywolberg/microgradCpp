@@ -134,17 +134,6 @@ Value *Value::relu() {
     return out;
 }
 
-void Value::backward() {
-    cout << "Running backward on: " << this->label << endl;
-    if (this->_backward != nullptr) this->_backward();
-    for (Value *ch : this->prev) {
-        cout << (long) ch << ", " << ch->label << "'s grad : " << ch->grad << endl;
-    }
-    for (Value *ch : this->prev) {
-        ch->backward();
-    }
-}
-
 
 // int main() {
 //     Value a = Value(1, "a");
