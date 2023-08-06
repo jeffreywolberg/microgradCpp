@@ -88,31 +88,29 @@ void Graph::backward(Value *terminal) {
     }
 }
 
+// int main() {
+//     Value a = Value(2, "a");
+//     Value b = Value(3, "b");
+//     Value *c = a * b; c->label="c";
+//     Value d = Value(4, "d");
+//     Value *e = *c / d; e->label="e";
+//     Value *f = d.power(*e); f->label="f";
+//     Graph g = Graph();
+//     g.backward(f);
+//     g.visualizeGraph(*f, "graphs/graph_double3.png");
 
+//     // Neuron n = Neuron(3, "neuron1");
+//     // for (Value *v : n.paramaters()) {
+//     //     cout << *v;
+//     // }
+//     // vector<Value *> data;
+//     // data.push_back(new Value(.5, "d1"));
+//     // data.push_back(new Value(.25, "d2"));
+//     // data.push_back(new Value(.75, "d3"));
 
-int main() {
-    Value a = Value(2, "a");
-    Value b = Value(3, "b");
-    Value *c = a * b; c->label="c";
-    Value d = Value(4, "d");
-    Value *e = *c / d; e->label="e";
-    Value *f = d.power(*e); f->label="f";
-    Graph g = Graph();
-    g.backward(f);
-    g.visualizeGraph(*f, "graphs/graph_double3.png");
+//     // Value *res = n.call(data); res->label = "res";
+//     // cout << *res << endl;
+//     // cout << n << endl;
 
-    // Neuron n = Neuron(3, "neuron1");
-    // for (Value *v : n.paramaters()) {
-    //     cout << *v;
-    // }
-    // vector<Value *> data;
-    // data.push_back(new Value(.5, "d1"));
-    // data.push_back(new Value(.25, "d2"));
-    // data.push_back(new Value(.75, "d3"));
-
-    // Value *res = n.call(data); res->label = "res";
-    // cout << *res << endl;
-    // cout << n << endl;
-
-    // res->grad = 1;
-}
+//     // res->grad = 1;
+// }

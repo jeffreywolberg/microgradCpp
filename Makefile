@@ -3,7 +3,13 @@ CFLAGS=-std=c++17 -g
 LDFLAGS=
 LDLIBS=
 
-Graph: Graph.o Operator.o Value.o
+Neuron: Operator.o Value.o Neuron.o
+	$(CXX) $(LDFLAGS) $(LDLIBS) $^ -o $@
+
+Neuron.o: Neuron.cpp
+	$(CXX) $(CFLAGS) -c $^ -o $@
+
+Graph: Graph.o Operator.o Value.o Neuron.o
 	$(CXX) $(LDFLAGS) $(LDLIBS) $^ -o $@
 
 Graph.o: Graph.cpp
@@ -20,7 +26,7 @@ Operator.o: Operator.cpp
 
 .PHONY: clean
 clean:
-	rm -rf main Value Graph core a.out *.o
+	rm -rf main MLP Neuron Operator Value Graph core a.out *.o
 
 .PHONY: all
 all: clean Value
