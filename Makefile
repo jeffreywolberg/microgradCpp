@@ -3,10 +3,16 @@ CFLAGS=-std=c++17 -g
 LDFLAGS=
 LDLIBS=
 
-Graph: Graph.o Layer.o Operator.o Value.o Neuron.o
+Graph: Graph.o MLP.o Layer.o Operator.o Value.o Neuron.o
 	$(CXX) $(LDFLAGS) $(LDLIBS) $^ -o $@
 
 Graph.o: Graph.cpp
+	$(CXX) $(CFLAGS) -c $^ -o $@
+
+MLP: MLP.o Layer.o Operator.o Value.o Neuron.o
+	$(CXX) $(LDFLAGS) $(LDLIBS) $^ -o $@
+
+MLP.o: MLP.cpp
 	$(CXX) $(CFLAGS) -c $^ -o $@
 
 Layer: Layer.o Operator.o Value.o Neuron.o

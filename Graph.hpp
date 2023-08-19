@@ -11,7 +11,7 @@
 #include <filesystem>
 #include <set>
 
-#include "Layer.hpp"
+#include "MLP.hpp"
 
 using namespace std;
 

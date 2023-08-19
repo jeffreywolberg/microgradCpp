@@ -92,28 +92,26 @@ void Graph::backward(Value *terminal) {
 }
 
 int main() {
-    // Value a = Value(2, "a");
-    // Value b = Value(3, "b");
-    // Value *c = a * b; c->label="c";
-    // Value d = Value(4, "d");
-    // Value *e = *c / d; e->label="e";
-    // Value *f = d.power(*e); f->label="f";
-    // Graph g = Graph();
-    // g.backward(f);
-    // g.visualizeGraph(*f, "graphs/graph_double3.png");
+//     // Value a = Value(2, "a");
+//     // Value b = Value(3, "b");
+//     // Value *c = a * b; c->label="c";
+//     // Value d = Value(4, "d");
+//     // Value *e = *c / d; e->label="e";
+//     // Value *f = d.power(*e); f->label="f";
+//     // Graph g = Graph();
+//     // g.backward(f);
+//     // g.visualizeGraph(*f, "graphs/graph_double3.png");
 
-    Layer l = Layer(2, 4, "l0", false);
-    for (Value *v : l.paramaters()) {
+    MLP mlp = MLP({2, 1}, "mlp0");
+    for (Value *v : mlp.paramaters()) {
         cout << *v;
     }
     vector<Value *> data;
     data.push_back(new Value(.5, "d0"));
     data.push_back(new Value(.25, "d1"));
     // data.push_back(new Value(.75, "d2"));
-    // data.push_back(new Value(.05, "d3"));
 
-
-    vector<Value *> res = l.call(data);
+    vector<Value *> res = mlp.call(data);
     for (Value *v : res) {
         cout << *v << endl;
     }
@@ -125,6 +123,6 @@ int main() {
     for (Value *v : res) {
         g.backward(v);
     }
-    g.visualizeGraph(res, "graphs/graph_double3.png");
-    cout << l;
+    g.visualizeGraph(res, "graphs/graphMLP.png");
+    cout << mlp << endl;
 }

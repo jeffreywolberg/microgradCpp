@@ -1,0 +1,34 @@
+digraph DAG {
+    ", data: 0, grad: 1";
+    "mlp0:l0:neuron0:w0, data: 0.740151, grad: 0.5";
+    "d0, data: 0.5, grad: 0.740151";
+    "mlp0:l0:neuron0:w0 * d0, data: 0.370075, grad: 1";
+    "mlp0:l0:neuron0:w0 * d0:*" [label="*"];
+    "mlp0:l0:neuron0:w0 * d0 cumsum, data: 0.370075, grad: 1";
+    "mlp0:l0:neuron0:w0 * d0 cumsum:+" [label="+"];
+    "mlp0:l0:neuron0:w1, data: -0.292785, grad: 0.25";
+    "d1, data: 0.25, grad: -0.292785";
+    "mlp0:l0:neuron0:w1 * d1, data: -0.0731964, grad: 1";
+    "mlp0:l0:neuron0:w1 * d1:*" [label="*"];
+    "mlp0:l0:neuron0:w1 * d1 cumsum, data: 0.296879, grad: 1";
+    "mlp0:l0:neuron0:w1 * d1 cumsum:+" [label="+"];
+    "mlp0:l0:neuron0:b, data: 0.27213, grad: 1";
+    "mlp0:l0:neuron0:w1 * d1 cumsum + bias, data: 0.569009, grad: 1";
+    "mlp0:l0:neuron0:w1 * d1 cumsum + bias:+" [label="+"];
+
+    ", data: 0, grad: 1" -> "mlp0:l0:neuron0:w0 * d0 cumsum:+";
+    "mlp0:l0:neuron0:w0, data: 0.740151, grad: 0.5" -> "mlp0:l0:neuron0:w0 * d0:*";
+    "d0, data: 0.5, grad: 0.740151" -> "mlp0:l0:neuron0:w0 * d0:*";
+    "mlp0:l0:neuron0:w0 * d0:*" -> "mlp0:l0:neuron0:w0 * d0, data: 0.370075, grad: 1";
+    "mlp0:l0:neuron0:w0 * d0, data: 0.370075, grad: 1" -> "mlp0:l0:neuron0:w0 * d0 cumsum:+";
+    "mlp0:l0:neuron0:w0 * d0 cumsum:+" -> "mlp0:l0:neuron0:w0 * d0 cumsum, data: 0.370075, grad: 1";
+    "mlp0:l0:neuron0:w0 * d0 cumsum, data: 0.370075, grad: 1" -> "mlp0:l0:neuron0:w1 * d1 cumsum:+";
+    "mlp0:l0:neuron0:w1, data: -0.292785, grad: 0.25" -> "mlp0:l0:neuron0:w1 * d1:*";
+    "d1, data: 0.25, grad: -0.292785" -> "mlp0:l0:neuron0:w1 * d1:*";
+    "mlp0:l0:neuron0:w1 * d1:*" -> "mlp0:l0:neuron0:w1 * d1, data: -0.0731964, grad: 1";
+    "mlp0:l0:neuron0:w1 * d1, data: -0.0731964, grad: 1" -> "mlp0:l0:neuron0:w1 * d1 cumsum:+";
+    "mlp0:l0:neuron0:w1 * d1 cumsum:+" -> "mlp0:l0:neuron0:w1 * d1 cumsum, data: 0.296879, grad: 1";
+    "mlp0:l0:neuron0:w1 * d1 cumsum, data: 0.296879, grad: 1" -> "mlp0:l0:neuron0:w1 * d1 cumsum + bias:+";
+    "mlp0:l0:neuron0:b, data: 0.27213, grad: 1" -> "mlp0:l0:neuron0:w1 * d1 cumsum + bias:+";
+    "mlp0:l0:neuron0:w1 * d1 cumsum + bias:+" -> "mlp0:l0:neuron0:w1 * d1 cumsum + bias, data: 0.569009, grad: 1";
+}

@@ -4,6 +4,7 @@
 using namespace std;
 
 Layer::Layer(int nin, int nout, string layerName, bool nonlin) {
+    assert(nin > 0 && nout > 0);
     for (int i=0; i<nout; i++) {
         neurons.push_back(new Neuron(nin, layerName + ":neuron" + to_string(i), nonlin));
     }
@@ -26,7 +27,6 @@ vector<Value *> Layer::call(vector<Value *> data) {
         Neuron *n = neurons[i];
         assert(data.size() == n->nin);
         Value *resValue = n->call(data);
-        // resValue->label = resValue->label + ":out" + to_string(i);
         res.push_back(resValue);
     }
     return res;
