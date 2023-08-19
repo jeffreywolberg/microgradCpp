@@ -10,7 +10,7 @@ class Layer {
         Layer(int nin, int nout, string layerName, bool nonlin);
         vector<Value *>call(vector<Value*> data);
         vector<Neuron *> neurons;
-        vector<Value *> paramaters();
+        vector<Value *> parameters();
         friend ostream& operator<<(ostream &os, const Layer &layer);
         string layerName;
 

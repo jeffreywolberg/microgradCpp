@@ -10,7 +10,7 @@ class MLP {
         MLP(vector<int> layerDims, string mlpName);
         vector<Value *>call(vector<Value*> data);
         vector<Layer *> layers;
-        vector<Value *> paramaters();
+        vector<Value *> parameters();
         friend ostream& operator<<(ostream &os, const MLP &mlp);
         string mlpName;
 };

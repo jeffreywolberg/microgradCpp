@@ -102,14 +102,14 @@ int main() {
 //     // g.backward(f);
 //     // g.visualizeGraph(*f, "graphs/graph_double3.png");
 
-    MLP mlp = MLP({2, 1}, "mlp0");
-    for (Value *v : mlp.paramaters()) {
+    MLP mlp = MLP({3, 1, 1}, "mlp0");
+    for (Value *v : mlp.parameters()) {
         cout << *v;
     }
     vector<Value *> data;
     data.push_back(new Value(.5, "d0"));
     data.push_back(new Value(.25, "d1"));
-    // data.push_back(new Value(.75, "d2"));
+    data.push_back(new Value(.75, "d2"));
 
     vector<Value *> res = mlp.call(data);
     for (Value *v : res) {
@@ -125,4 +125,8 @@ int main() {
     }
     g.visualizeGraph(res, "graphs/graphMLP.png");
     cout << mlp << endl;
+
+    for (const auto &param : mlp.parameters()) {
+        cout << *param << endl;
+    }
 }

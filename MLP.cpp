@@ -3,6 +3,8 @@
 
 using namespace std;
 
+// layerDims represents [inputDims, ..., outputDims]
+// numLayers == layerDims.size() - 1
 MLP::MLP(vector<int> layerDims, string mlpName) {
     for (int i=0;i<layerDims.size()-1; i++) {
         bool nonLinOutput = (i+1) != layerDims.size()-1;
@@ -12,10 +14,10 @@ MLP::MLP(vector<int> layerDims, string mlpName) {
     this->mlpName = mlpName;
 }
 
-vector<Value*> MLP::paramaters() {
+vector<Value*> MLP::parameters() {
     vector<Value *> res;
     for (int i=0; i<layers.size(); i++) {
-        vector<Value *> params = layers[i]->paramaters();
+        vector<Value *> params = layers[i]->parameters();
         res.insert(res.end(), params.begin(), params.end());
     }
     return res;
@@ -44,7 +46,7 @@ ostream& operator<<(ostream &os, const MLP &mlp) {
 
 // int main() {
 //     MLP mlp = MLP({2, 2, 3}, "mlp0");
-//     for (Value *v : mlp.paramaters()) {
+//     for (Value *v : mlp.parameters()) {
 //         cout << *v;
 //     }
 //     vector<Value *> data;

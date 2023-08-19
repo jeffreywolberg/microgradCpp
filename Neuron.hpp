@@ -6,7 +6,7 @@
 class Neuron {
     public:
         Neuron(int nin, string name, bool nonlin);
-        vector<Value *> paramaters();
+        vector<Value *> parameters();
         Value *call(vector<Value *>);
         friend ostream &operator<<(ostream &os, const Neuron &neuron);
         vector<Value *> weights;

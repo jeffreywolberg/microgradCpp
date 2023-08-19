@@ -17,7 +17,7 @@ Neuron::Neuron(int nin, string name, bool nonlin) {
     this->nin = nin;
 }
 
-vector<Value *> Neuron::paramaters() {
+vector<Value *> Neuron::parameters() {
     vector<Value *> out = this->weights; // deep copy
     out.push_back(this->bias);
     return out;
@@ -44,7 +44,7 @@ ostream& operator<<(ostream &os, const Neuron &neuron) {
 
 // int main() {
 //     Neuron n = Neuron(3, "neuron1", false);
-//     for (Value *v : n.paramaters()) {
+//     for (Value *v : n.parameters()) {
 //         cout << *v;
 //     }
 //     vector<Value *> data;

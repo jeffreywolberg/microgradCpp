@@ -11,10 +11,10 @@ Layer::Layer(int nin, int nout, string layerName, bool nonlin) {
     this->layerName = layerName;
 }
 
-vector<Value*> Layer::paramaters() {
+vector<Value*> Layer::parameters() {
     vector<Value *> res;
     for (int i=0; i<neurons.size(); i++) {
-        vector<Value *> params = neurons[i]->paramaters();
+        vector<Value *> params = neurons[i]->parameters();
         res.insert(res.end(), params.begin(), params.end());
     }
     return res;
@@ -43,7 +43,7 @@ ostream& operator<<(ostream &os, const Layer &layer) {
 
 // int main() {
 //     Layer l = Layer(2, 2, "l0", false);
-//     for (Value *v : l.paramaters()) {
+//     for (Value *v : l.parameters()) {
 //         cout << *v;
 //     }
 //     vector<Value *> data;
