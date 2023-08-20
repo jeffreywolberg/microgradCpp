@@ -91,6 +91,7 @@ void Graph::backward(Value *terminal) {
     }
 }
 
+/*
 int main() {
 //     // Value a = Value(2, "a");
 //     // Value b = Value(3, "b");
@@ -130,3 +131,4 @@ int main() {
         cout << *param << endl;
     }
 }
+*/

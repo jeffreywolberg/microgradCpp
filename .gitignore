@@ -6,6 +6,7 @@ Utils
 Neuron
 Layer
 MLP
+Training
 .DS_Store
 *~*
 *tmp*
