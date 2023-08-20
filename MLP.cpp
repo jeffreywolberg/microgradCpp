@@ -34,6 +34,12 @@ vector<Value *> MLP::call(vector<Value *> data) {
     return activations;
 }
 
+void MLP::zeroGrad() {
+    for (Value *value : this->parameters()) {
+        value->grad = 0;
+    }
+}
+
 ostream& operator<<(ostream &os, const MLP &mlp) {
     for (int i=0; i<mlp.layers.size(); i++) {
         Layer *l = mlp.layers[i];

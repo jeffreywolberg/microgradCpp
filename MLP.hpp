@@ -11,6 +11,7 @@ class MLP {
         vector<Value *>call(vector<Value*> data);
         vector<Layer *> layers;
         vector<Value *> parameters();
+        void zeroGrad();
         friend ostream& operator<<(ostream &os, const MLP &mlp);
         string mlpName;
 };
