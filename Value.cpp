@@ -93,7 +93,7 @@ Value *Value::operator *(Value &obj) {
 Value *Value::operator -(Value &obj) {
     Value *out = new Value(this->data - obj.data, Operator::SUB, vector<Value*>{this, (Value*) &obj});
     out->_backward =  [this, &obj, out]() {
-        obj.grad += 1.0 * out->grad;
+        obj.grad += -1.0 * out->grad;
         this->grad += 1.0 * out->grad;
     };
     return out;

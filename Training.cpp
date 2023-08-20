@@ -38,7 +38,7 @@ int main() {
             assert(NUM_OUTPUTS == res.size());
             // accum grad for sample
             for (Value *pred : res) {
-                Value *loss = (*pred - *groundTruth[i])->power(two);
+                Value *loss = (*groundTruth[i] - *pred)->power(two);
                 g.backward(loss);
                 totalLoss += loss->data;
             }
