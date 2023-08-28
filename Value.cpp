@@ -122,14 +122,20 @@ Value *Value::power(Value &obj) {
     return out;
 }
 
-// Value Value::power(double const n)  {
-//     return Value(pow(this->data, (double) n));
-// }
+Value *Value::power(double const n)  {
+    Value *out = new Value(pow(this->data, (double) n), Operator::POW, vector<Value*>{this});
+    out->_backward =  [this, n, out]() {
+        // cout << "In power(n) backward" << endl;
+        // cout << "This->grad: " << this->grad << ", n: " << n << ", this->data: " << this->data << ", out->grad: " << out->grad << endl;
+        this->grad += n * pow(this->data, n-1) * out->grad;
+    };
+    return out;
+}
 
 Value *Value::relu() {
     Value *out = new Value(this->data > 0 ? this->data : 0, Operator::RELU, vector<Value*>{this}); 
     out->_backward =  [this, out]() {
-        this->grad += out->data > 0 ? 1 : 0;
+        this->grad += (out->data > 0 ? 1 : 0) * out->grad;
     };
     return out;
 }
