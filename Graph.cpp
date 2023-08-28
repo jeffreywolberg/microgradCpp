@@ -38,10 +38,6 @@ void Graph::visualizeGraph(vector<Value *>terminalNodes, filesystem::path imgnam
     for (Value *terminal : terminalNodes) {
         visited.clear();
         this->topo(terminal, topoList, visited);
-        // cout << "Finished topo" << endl;
-        // for (int i=0; i<topoList.size(); i++) {
-            // cout << i << ") " << *topoList[i];
-        // }
         visited.clear();
         generateEdgeList(terminal, eList, visited);
     }
@@ -58,11 +54,9 @@ void Graph::visualizeGraph(vector<Value *>terminalNodes, filesystem::path imgnam
         #else 
             string dotExecPath = "/opt/homebrew/bin/dot";
         #endif
-        cout << "dotExecPath :" << dotExecPath << endl;
         char *args[] = {(char *) dotExecPath.c_str(), (char *)"-Tpng", (char*) filepath.c_str(), (char *)"-o", (char *) imgname.c_str(), nullptr};
         execvp(args[0], args);
-        cout << "Exec failed";
-        fprintf(stderr, "Failed to execute %s: %s\n", dotExecPath.c_str(), strerror(errno));
+        cout << "Failed to execute " << dotExecPath.c_str() << ", error: " << strerror(errno) << endl;
         exit(EXIT_FAILURE);
     } else {
         int status;

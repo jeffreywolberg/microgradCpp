@@ -64,9 +64,7 @@ string Value::getGraphOpName() {
 Value *Value::operator +(Value &obj) {
     Value *out = new Value(this->data + obj.data, Operator::ADD, vector<Value*>{this, (Value*) &obj});
     
-    out->_backward =  [this, &obj, out]() {
-        // cout << "In + backward function for node: " << this->label << endl;
-        // cout << "this data: " << this->data << ", out.grad: " << out->grad << ", out.data: " << out->data << ", obj.data: " << obj.data << endl;
+    out->_backward = [this, &obj, out]() {
         obj.grad += 1.0 * out->grad;
         this->grad += 1.0 * out->grad;
     };
@@ -78,10 +76,7 @@ Value *Value::operator +(Value &obj) {
 // }
 Value *Value::operator *(Value &obj) {
     Value *out = new Value(this->data * obj.data, Operator::MUL, vector<Value*>{this, &obj});
-    // cout << long (out) << " result of mul between " << this->data << " and " << obj.data << ": " << out->data << endl; 
     out->_backward =  [this, &obj, out]() {
-        // cout << "In * backward function for node: " << this->label << endl;
-        // cout << "this data: " << this->data << ", out.addr " << (long) out << ", out.grad: " << out->grad << ", out.data: " << out->data << ", obj.data: " << obj.data << endl;
         obj.grad += this->data * out->grad;
         this->grad += obj.data * out->grad;
     };
@@ -125,8 +120,6 @@ Value *Value::power(Value &obj) {
 Value *Value::power(double const n)  {
     Value *out = new Value(pow(this->data, (double) n), Operator::POW, vector<Value*>{this});
     out->_backward =  [this, n, out]() {
-        // cout << "In power(n) backward" << endl;
-        // cout << "This->grad: " << this->grad << ", n: " << n << ", this->data: " << this->data << ", out->grad: " << out->grad << endl;
         this->grad += n * pow(this->data, n-1) * out->grad;
     };
     return out;
