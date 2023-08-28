@@ -4,6 +4,8 @@
 #include <vector>
 #include <string>
 #include <map>
+#include <functional>
+#include <cassert>
 #include "Operator.hpp"
 
 using namespace std;
@@ -39,7 +41,7 @@ class Value {
         // Value operator -(double const n);
         Value *operator /(Value &obj);
         Value *power(Value &obj);
-        // Value power(double n);
+        Value *power(double n);
         Value *relu();
         function<void()> _backward;
 };
