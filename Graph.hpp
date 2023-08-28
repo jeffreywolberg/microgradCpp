@@ -26,6 +26,7 @@ class Graph {
         void visualizeGraph(vector<Value *> terminalNodes, filesystem::path);
         void generateEdgeList(Value *v, EdgeList &eList, set<Value*> &visited);
         void backward(Value *terminal);
+        void zeroGrad(Value *terminal);
 };
 
 #endif

@@ -91,6 +91,17 @@ void Graph::backward(Value *terminal) {
     }
 }
 
+void Graph::zeroGrad(Value *terminal) {
+    vector<Value*> topoList;
+    set<Value*> visited;
+    this->topo(terminal, topoList, visited);
+    terminal->grad = 1;
+    assert(topoList.back() == terminal);
+    for (int i=topoList.size()-1; i>=0; i--) {
+        topoList[i]->grad = 0.0;
+    }
+}
+
 /*
 int main() {
 //     // Value a = Value(2, "a");

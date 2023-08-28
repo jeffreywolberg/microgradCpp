@@ -14,6 +14,9 @@ Training: $(OBJ)
 Graph: Graph.o MLP.o Layer.o Operator.o Value.o Neuron.o
 	$(CXX) $(LDFLAGS) $^ $(LDLIBS) -o $@
 
+Tests: Graph.o MLP.o Layer.o Operator.o Value.o Neuron.o Tests.o
+	$(CXX) $(LDFLAGS) $^ $(LDLIBS) -o $@
+
 %.o: %.cpp
 	$(CXX) $(CFLAGS) -c $< -o $@
 
