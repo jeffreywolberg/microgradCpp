@@ -53,7 +53,13 @@ void Graph::visualizeGraph(vector<Value *>terminalNodes, filesystem::path imgnam
     this->generateDotFile(topoList, eList, filepath);
     pid_t pid = fork();
     if (pid == 0) {
-        char *args[] = {(char *)"/opt/homebrew/bin/dot", (char *)"-Tpng", (char*) filepath.c_str(), (char *)"-o", (char *) imgname.c_str(), nullptr};
+        #if defined(__linux__)
+            string dotExecPath = "usr/bin/dot";
+        #else 
+            string dotExecPath = "/opt/homebrew/bin/dot";
+        #endif
+        cout << "dotExecPath :" << dotExecPath << endl;
+        char *args[] = {(char *) dotExecPath.c_str(), (char *)"-Tpng", (char*) filepath.c_str(), (char *)"-o", (char *) imgname.c_str(), nullptr};
         execvp(args[0], args);
         cout << "Exec failed";
     } else {
