@@ -62,6 +62,8 @@ void Graph::visualizeGraph(vector<Value *>terminalNodes, filesystem::path imgnam
         char *args[] = {(char *) dotExecPath.c_str(), (char *)"-Tpng", (char*) filepath.c_str(), (char *)"-o", (char *) imgname.c_str(), nullptr};
         execvp(args[0], args);
         cout << "Exec failed";
+        fprintf(stderr, "Failed to execute %s: %s\n", dotExecPath.c_str(), strerror(errno));
+        exit(EXIT_FAILURE);
     } else {
         int status;
         waitpid(pid, &status, 0);

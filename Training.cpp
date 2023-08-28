@@ -14,7 +14,7 @@ using namespace std;
 // Value two = Value(2);
 
 int main() {
-  double learningRate = 0.005;
+  double learningRate = 0.01;
   double tmpInput[NUM_SAMPLES][NUM_INPUTS] = {{2,3,-1.0}, {3,-1.0, 0.5}, {0.5,1,1}, {1, 1, -1}};
   Value *input[NUM_SAMPLES][NUM_INPUTS];
   for (int i=0; i<NUM_SAMPLES; i++) {
@@ -22,7 +22,7 @@ int main() {
         input[i][j] = new Value(tmpInput[i][j]);
     }
   }
-  double tmpOutput[NUM_SAMPLES][NUM_OUTPUTS] = {1 -1, -1, 1};
+  double tmpOutput[NUM_SAMPLES][NUM_OUTPUTS] = {{1.0}, {-1.0}, {-1.0}, {1.0}};
   Value *groundTruth[NUM_SAMPLES][NUM_OUTPUTS];
   for (int i=0; i<NUM_SAMPLES; i++) {
     for (int j=0; j<NUM_OUTPUTS; j++) {
@@ -35,7 +35,7 @@ int main() {
   assert(NUM_SAMPLES == sizeof(input) / sizeof(Value *) / NUM_INPUTS);
   assert(NUM_SAMPLES == (sizeof(groundTruth) / sizeof(Value *) / NUM_OUTPUTS));
 
-  MLP mlp = MLP({NUM_INPUTS, 4, NUM_OUTPUTS}, "mlp");
+  MLP mlp = MLP({NUM_INPUTS, 2, NUM_OUTPUTS}, "mlp");
   for (int epoch = 0; epoch < NUM_EPOCHS; epoch++) {
     double totalLoss = 0;
     for (int i = 0; i < NUM_SAMPLES; i++) {
