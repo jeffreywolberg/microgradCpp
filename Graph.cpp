@@ -38,10 +38,10 @@ void Graph::visualizeGraph(vector<Value *>terminalNodes, filesystem::path imgnam
     for (Value *terminal : terminalNodes) {
         visited.clear();
         this->topo(terminal, topoList, visited);
-        cout << "Finished topo" << endl;
-        for (int i=0; i<topoList.size(); i++) {
-            cout << i << ") " << *topoList[i];
-        }
+        // cout << "Finished topo" << endl;
+        // for (int i=0; i<topoList.size(); i++) {
+            // cout << i << ") " << *topoList[i];
+        // }
         visited.clear();
         generateEdgeList(terminal, eList, visited);
     }

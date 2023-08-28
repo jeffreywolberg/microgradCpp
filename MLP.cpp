@@ -5,9 +5,10 @@ using namespace std;
 
 // layerDims represents [inputDims, ..., outputDims]
 // numLayers == layerDims.size() - 1
+// nonlin: if every layer other than the last should be nonlin (have RELU)
 MLP::MLP(vector<int> layerDims, string mlpName) {
     for (int i=0;i<layerDims.size()-1; i++) {
-        bool nonLinOutput = (i+1) != layerDims.size()-1;
+        bool nonLinOutput = ((i+1) != layerDims.size()-1);
         string layerName = mlpName + ":" + "l" + to_string(i);
         layers.push_back(new Layer(layerDims[i], layerDims[i+1], layerName, nonLinOutput));
     }

@@ -44,6 +44,8 @@ class Value {
         Value *power(double n);
         Value *relu();
         function<void()> _backward;
+        // void(*_backward)();
+
 };
 
 #endif

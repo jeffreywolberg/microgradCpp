@@ -1,18 +1,22 @@
 #include "Neuron.hpp"
 #include <random>
 #include <iostream>
+#include <cmath>
 
 using namespace std;
 
 random_device rd;  // obtain a seed from the hardware
 mt19937 gen(rd()); // seed the generator
-uniform_real_distribution<> distr(-1.0, 1.0);
+// uniform_real_distribution<> distr(-1.0, 1.0);
 
 Neuron::Neuron(int nin, string name, bool nonlin) {
+    uniform_real_distribution<> distr(-sqrt(nin), sqrt(nin));
     for (int i=0; i<nin; i++) {
-        weights.push_back(new Value(distr(gen), name + ":w" + to_string(i)));
+        this->weights.push_back(new Value(distr(gen), name + ":w" + to_string(i)));
+        // weights.push_back(new Value(0.0, name + ":w" + to_string(i)));
     }
-    bias = new Value(distr(gen), name + ":b");
+    // bias = new Value(distr(gen), name + ":b");
+    this->bias = new Value(0.0, name + ":b");
     this->nonlin = nonlin;
     this->nin = nin;
 }
